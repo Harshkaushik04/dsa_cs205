@@ -1,7 +1,30 @@
 #include <iostream>
+#include <random>
+#include <ctime>
 
 using namespace std;
 
+int* sorted_array_generator(int num_integers){
+    int arr[num_integers];
+    int* arr_pointer=arr;
+    for(int i=0;i<num_integers;i++){
+        arr_pointer[i]=i;
+    }
+    return arr_pointer;
+}
+
+int* unsorted_array_generator(int num_integers,int random_seed){
+    mt19937 gen(random_seed);
+    int lower_bound = 0;
+    int upper_bound = 15000;
+    uniform_int_distribution<> dis(lower_bound, upper_bound); 
+    int arr[num_integers];
+    int* arr_pointer=arr;
+    for(int i=0;i<num_integers;i++){
+        arr_pointer[i]=dis(gen);
+    }
+    return arr_pointer;
+}
 int* BubbleSort(int arr[],int arr_length){
     int x;
     int y;
@@ -210,69 +233,102 @@ void QuickSort(int* arr,int start,int end){
 
 
 int main(){
-    int option_selected;
-    int num_test_cases;
-    cin>>option_selected;
-    cin>>num_test_cases;
-    int* arr_lengths=new int[num_test_cases];
-    int** arr=new int*[num_test_cases];
-    for(int i=0;i<num_test_cases;i++){
-        cin>>arr_lengths[i];
-        arr[i]=new int[arr_lengths[i]];
-        for(int j=0;j<arr_lengths[i];j++){
-            cin>>arr[i][j];
-        }
+    int* sorted_arr;
+    int* unsorted_arr;
+    clock_t start;
+    clock_t end;
+    vector<double> bubble_sort_time={};
+    vector<double> insertion_sort_time={};
+    vector<double> selection_sort_time={};
+    vector<double> merge_sort_time={};
+    vector<double> quick_sort_time={};
+    double duration;
+    int x=9995;
+    for(int i=2;i<=x+5;i++){
+        cout<<i<<endl;
+        int* answer_arr=new int[i];
+        sorted_arr=sorted_array_generator(i);
+        unsorted_arr=unsorted_array_generator(i,42);
+        //unsorted
+        start=clock();
+        answer_arr=BubbleSort(unsorted_arr,i);
+        end=clock();
+        duration = double(end - start) / CLOCKS_PER_SEC;
+        bubble_sort_time.push_back(duration);
+        // start=clock();
+        // answer_arr=InsertionSort(unsorted_arr,i);
+        // end=clock();
+        // duration = double(end - start) / CLOCKS_PER_SEC;
+        // insertion_sort_time.push_back(duration);
+        // start=clock();
+        // answer_arr=SelectionSort(unsorted_arr,i);
+        // end=clock();
+        // duration = double(end - start) / CLOCKS_PER_SEC;
+        // selection_sort_time.push_back(duration);
+        // start=clock();
+        // answer_arr=MergeSort(unsorted_arr,i);
+        // end=clock();
+        // duration = double(end - start) / CLOCKS_PER_SEC;
+        // merge_sort_time.push_back(duration);
+        // start=clock();
+        // QuickSort(unsorted_arr,0,i-1);
+        // end=clock();
+        // duration = double(end - start) / CLOCKS_PER_SEC;
+        // quick_sort_time.push_back(duration);
+        // delete[] answer_arr;
     }
-    if(option_selected==1){
-        for(int i=0;i<num_test_cases;i++){
-            arr[i]=BubbleSort(arr[i],arr_lengths[i]);
-            for(int j=0;j<arr_lengths[i];j++){
-                cout<<arr[i][j]<<" ";
-            }
-            cout<<endl;
-        }
+    cout<<"Bubble sort time:"<<bubble_sort_time[x]<<endl;
+    for(int i=2;i<=x+5;i++){
+        cout<<i<<endl;
+        int* answer_arr=new int[i];
+        sorted_arr=sorted_array_generator(i);
+        unsorted_arr=unsorted_array_generator(i,42);
+        //unsorted
+        start=clock();
+        answer_arr=InsertionSort(unsorted_arr,i);
+        end=clock();
+        duration = double(end - start) / CLOCKS_PER_SEC;
+        insertion_sort_time.push_back(duration);
     }
-    else if(option_selected==2){
-        for(int i=0;i<num_test_cases;i++){
-            arr[i]=InsertionSort(arr[i],arr_lengths[i]);
-            for(int j=0;j<arr_lengths[i];j++){
-                cout<<arr[i][j]<<" ";
-            }
-            cout<<endl;
-        }
+    cout<<"insertion sort time:"<<insertion_sort_time[x]<<endl;
+    for(int i=2;i<=x+5;i++){
+        cout<<i<<endl;
+        int* answer_arr=new int[i];
+        sorted_arr=sorted_array_generator(i);
+        unsorted_arr=unsorted_array_generator(i,42);
+        //unsorted
+        start=clock();
+        answer_arr=SelectionSort(unsorted_arr,i);
+        end=clock();
+        duration = double(end - start) / CLOCKS_PER_SEC;
+        selection_sort_time.push_back(duration);
     }
-    else if(option_selected==3){
-        for(int i=0;i<num_test_cases;i++){
-            arr[i]=SelectionSort(arr[i],arr_lengths[i]);
-            for(int j=0;j<arr_lengths[i];j++){
-                cout<<arr[i][j]<<" ";
-            }
-            cout<<endl;
-        }
+    cout<<"selection sort time:"<<selection_sort_time[x]<<endl;
+    for(int i=2;i<=x+5;i++){
+        cout<<i<<endl;
+        int* answer_arr=new int[i];
+        sorted_arr=sorted_array_generator(i);
+        unsorted_arr=unsorted_array_generator(i,42);
+        //unsorted
+        start=clock();
+        answer_arr=MergeSort(unsorted_arr,i);
+        end=clock();
+        duration = double(end - start) / CLOCKS_PER_SEC;
+        merge_sort_time.push_back(duration);
     }
-    else if(option_selected==4){
-        for(int i=0;i<num_test_cases;i++){
-            arr[i]=MergeSort(arr[i],arr_lengths[i]);
-            for(int j=0;j<arr_lengths[i];j++){
-                cout<<arr[i][j]<<" ";
-            }
-            cout<<endl;
-        }
+    cout<<"merge sort time:"<<merge_sort_time[x]<<endl;
+    for(int i=2;i<=x+5;i++){
+        cout<<i<<endl;
+        int* answer_arr=new int[i];
+        sorted_arr=sorted_array_generator(i);
+        unsorted_arr=unsorted_array_generator(i,42);
+        //unsorted
+        start=clock();
+        QuickSort(unsorted_arr,0,i-1);
+        end=clock();
+        duration = double(end - start) / CLOCKS_PER_SEC;
+        quick_sort_time.push_back(duration);
     }
-    else if(option_selected==5){
-        for(int i=0;i<num_test_cases;i++){
-            QuickSort(arr[i],0,arr_lengths[i]-1);
-            for(int j=0;j<arr_lengths[i];j++){
-                cout<<arr[i][j]<<" ";
-            }
-            cout<<endl;
-        }
-    }
-    // int arr[5]={4,2,9,8,6};
-    // int arr_length=5;
-    // int* sorted_array=BubbleSort(arr,arr_length);
-    // for(int i=0;i<arr_length;i++){
-    //     cout<<*(sorted_array+i)<<endl;
-    // }
+    cout<<"quick sort time:"<<quick_sort_time[x]<<endl;
     return 0;
 }
